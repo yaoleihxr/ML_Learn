@@ -25,17 +25,17 @@ model = Sequential()
 # layer 2
 # 作为模型第一层时，需要提供 input_shape 参数
 model.add(Conv2D(filters=6, kernel_size=(3,3), strides=(1,1), input_shape=x_train.shape[1:],
-                 data_format='channel_last', padding='valid', activation='relu',
+                 data_format='channels_last', padding='same', activation='relu',
                  kernel_initializer='uniform'))
 # layer 3
 model.add(MaxPooling2D(2,2))
 # layer 4
-model.add(Conv2D(filters=16, kernel_size=(3,3), strides=(1,1), data_format='channel_last',
+model.add(Conv2D(filters=16, kernel_size=(3,3), strides=(1,1), data_format='channels_last',
                  padding='valid', activation='relu', kernel_initializer='uniform'))
 # layer 5
 model.add(MaxPooling2D(2,2))
 # layer 6
-model.add(Conv2D(filters=120, kernel_size=(5,5), strides=(1,1), data_format='channel_last',
+model.add(Conv2D(filters=120, kernel_size=(5,5), strides=(1,1), data_format='channels_last',
                  padding='valid', activation='relu', kernel_initializer='uniform'))
 model.add(Flatten())
 # layer 7
