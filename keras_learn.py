@@ -6,7 +6,6 @@ from keras.layers import Dense, Flatten
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils.np_utils import to_categorical
 from keras.datasets import mnist
-from keras.utils import plot_model
 
 # load_Data #
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -46,3 +45,37 @@ model.add(Dense(10, activation='softmax'))
 model.summary()
 # model #
 
+
+# model compile #
+model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+print('train________________')
+model.fit(x_train, y_train, epochs=10, batch_size=128)
+print('test_________________')
+loss, acc = model.evaluate(x_test, y_test)
+print('loss=', loss)
+print('accuracy=', acc)
+# model compile #
+
+
+# plot model #
+from keras.utils import plot_model
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+plot_model(model, to_file='E:/example.png', show_shapes=True)
+lena = mpimg.imread('E:/example.png')
+print(lena.shape)
+plt.imshow(lena)
+plt.axis('off')
+plt.show()
+# plot model #
+
+
+
+# save model #
+model_path = 'E:/model.h5'
+model.save(model_path)
+
+from keras.models import load_model
+model = load_model(model_path)
+# save model #
