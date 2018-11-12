@@ -9,7 +9,8 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 
-path = '/sas/cxdx/yl/test/'
+# path = '/sas/cxdx/yl/test/'
+path = 'E:/'
 
 def load_data():
     train = pd.read_csv(path + 'MNIST.train.csv')
@@ -30,7 +31,7 @@ def model_fit(xgb_model, dtrain, cv_folds=5, early_stopping_rounds=50):
     # print(xgb_param) # dict
     xgb_train = xgb.DMatrix(xgb_train, label=train_label)
     xgb_test = xgb.DMatrix(xgb_val)
-    cv_result = xgb.cv(xgb_param, xgb_train, nfold=5, num_boost_round=1000,
+    cv_result = xgb.cv(xgb_param, xgb_train, nfold=5, num_boost_round=300,
                        early_stopping_rounds=early_stopping_rounds)
     print(cv_result)
     print(cv_result.shape[0])
@@ -44,16 +45,25 @@ def model_fit(xgb_model, dtrain, cv_folds=5, early_stopping_rounds=50):
     print(type(feat))
     print('准确率 : %.4g' % metrics.accuracy_score(dtrain.values[:, 0], dtrain_pred))
 
+def grid_search(xgb_model, param, dtrain):
+    # gsearch = GridSearchCV(estimator=xgb_model, param_grid=param, scoring='accuracy', cv=5)
+    gsearch = GridSearchCV(estimator=xgb_model, param_grid=param, cv=5)
+    gsearch.fit(dtrain.values[:, 1:], dtrain.values[:, 0])
+    print(gsearch.cv_results_)
+    print(gsearch.best_score_)
+    print(gsearch.best_params_)
 
 
 if __name__ == '__main__':
     train, test = load_data()
-    xgb_model = XGBClassifier(booster='gbtree', learning_rate=0.1, n_estimators=1000, max_depth=6,
+    xgb_model = XGBClassifier(booster='gbtree', learning_rate=0.1, n_estimators=300, max_depth=6,
                               reg_alpha=0.05, min_child_weight=1, gamma=0, subsample=0.8,
                               colsample_bytree=1, objective='multi:softmax', num_class=10,
                               scale_pos_weight=1)
     model_fit(xgb_model, train)
 
+    # xgb_model.get_booster().save_model('E:/xgb.model')
+    # clf = xgb.Booster(model_file='E:/xgb.model')
 
 
 
