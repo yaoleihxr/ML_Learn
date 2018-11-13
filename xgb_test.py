@@ -22,8 +22,8 @@ def load_data():
 def train_split(train):
     train_data = train.values[:, 1:]
     train_label = train.values[:, 0]
-    xgb_train, xgb_val, train_label, val_label = train_test_split(train_data, train_label, test_size=0.3)
-    return xgb_train, xgb_val, train_label, val_label
+    data_train, data_val, train_label, val_label = train_test_split(train_data, train_label, test_size=0.3)
+    return data_train, data_val, train_label, val_label
 
 def model_fit(xgb_model, dtrain, cv_folds=5, early_stopping_rounds=50):
     xgb_train, xgb_val, train_label, val_label = train_split(train)
@@ -33,7 +33,7 @@ def model_fit(xgb_model, dtrain, cv_folds=5, early_stopping_rounds=50):
     xgb_test = xgb.DMatrix(xgb_val)
     cv_result = xgb.cv(xgb_param, xgb_train, nfold=5, num_boost_round=300,
                        early_stopping_rounds=early_stopping_rounds)
-    print(cv_result)
+    print(cv_result) #DataFrame: columns=[test-merror-mean  test-merror-std  train-merror-mean  train-merror-std]
     print(cv_result.shape[0])
 
     xgb_model.set_params(n_estimators=cv_result.shape[0])
