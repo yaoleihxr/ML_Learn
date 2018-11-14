@@ -60,3 +60,4 @@ if __name__ == '__main__':
     model_fit(train, {'n_estimators':100})
 
     param_search = {'n_estimators': range(50, 220, 30)}
+    grid_search(gbdt_model, param_search, train)
