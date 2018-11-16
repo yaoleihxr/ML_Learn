@@ -50,6 +50,7 @@ def grid_search(gbdt_model, param_search, dtrain):
     print(gsearch.cv_results_)
     print(gsearch.best_score_)
     print(gsearch.best_params_)
+    return gsearch.best_params_
 
 
 if __name__ == '__main__':
@@ -60,4 +61,16 @@ if __name__ == '__main__':
     model_fit(train, {'n_estimators':100})
 
     param_search = {'n_estimators': range(50, 220, 30)}
-    grid_search(gbdt_model, param_search, train)
+    param_find = grid_search(gbdt_model, param_search, train)
+
+    gbdt_model.set_params(**param_find)
+    param_search = {'max_depth':range(3,14,2), 'min_samples_split':range(1,301, 50)}
+    param_find = grid_search(gbdt_model, param_search, train)
+
+    gbdt_model.set_params(**param_find)
+    param_search = {'min_samples_leaf':range(1,101,20)}
+    param_find = grid_search(gbdt_model, param_search, train)
+
+    gbdt_model.set_params(**param_find)
+    gbdt_model = model_fit(train, gbdt_model.get_params())
+
