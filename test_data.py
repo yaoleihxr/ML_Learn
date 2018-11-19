@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-path = '/sas/cxdx/yl/test/'
-# path = 'E:/'
+# path = '/sas/cxdx/yl/test/'
+path = 'E:/'
 
 def load_data():
     train = pd.read_csv(path + 'MNIST.train.csv')
